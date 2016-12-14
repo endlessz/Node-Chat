@@ -26,24 +26,13 @@
                     </div>
                 </div>
                 <div class="panel-body body-panel">
-                    <ul class="chat">
+                    <ul class="chat" id="chat">
                         <li class="left clearfix">
                             <div class="chat-body clearfix">
                                 <div class="header">
                                     <strong class="primary-font">Jack Sparrow</strong> 
                                 </div>
                                 <p class="pull-left">
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare
-                                    dolor, quis ullamcorper ligula sodales.
-                                </p>
-                            </div>
-                        </li>
-                        <li class="right clearfix">
-                            <div class="chat-body clearfix">
-                                <div class="header">
-                                    <strong class="pull-right primary-font">Bhaumik Patel</strong>
-                                </div>
-                                <p class="pull-right">
                                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare
                                     dolor, quis ullamcorper ligula sodales.
                                 </p>
@@ -71,6 +60,38 @@
 		$(function(){
 			var socket = io.connect();
 
+            //Status
+            socket.on('status', function(data){
+                $('#status').text(data);
+            });
+
+            socket.on('messages', function(data){
+                if(data.length){
+                    for(var i = 0 ; i < data.length ; ++i){
+                        var list = $(document.createElement('li'));
+                        list.addClass('left clearfix');
+
+                        var header = $(document.createElement('div'));
+                        header.addClass('header');
+
+                        var name = $(document.createElement('strong'));
+                        name.addClass('primary-font');
+                        name.text(data[i].name);
+
+                        var message = $(document.createElement('p'));
+                        message.addClass('pull-left');
+                        message.text(data[i].message);
+
+                        header.append(name);
+                        list.append(header);
+                        list.append(message);
+
+                        $('#chat').append(list);
+                    }
+                }
+            });
+
+            //Send message
             function sendMessage(){
                 socket.emit('input', {
                     name: $('#name').val(),
@@ -93,10 +114,6 @@
 
                 sendMessage();
             })
-
-            socket.on('status', function(data){
-                $('#status').text(data);
-            });
 		});
 	</script>
 </body>
