@@ -52,9 +52,12 @@
                     </ul>
                 </div>
                 <div class="panel-footer clearfix">
-                    <textarea class="form-control" rows="3" placeholder="Enter your message"></textarea>
-                    <span class="text-muted">Status: Idle</span>
-                    <button class="btn btn-success pull-right" id="send-btn">Send</button>
+                    <form id="chat-form">
+                        <input type="hidden" name="name" id="name" value="Anonymous"/>
+                        <textarea class="form-control" rows="3" placeholder="Enter your message" name="message" id="message"></textarea>
+                        <span class="text-muted">Status: <span id="status">Idle</span></span>
+                        <button type="submit" class="btn btn-success pull-right" id="send-btn">Send</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -67,6 +70,29 @@
 	<script>
 		$(function(){
 			var socket = io.connect();
+
+            function sendMessage(){
+                socket.emit('input', {
+                    name: $('#name').val(),
+                    message: $('#message').val()
+                });
+
+                $('#message').val('');
+            }
+
+            $('#message').keypress(function(event) {
+                if(event.which == 13 && event.shiftKey === false){
+                    event.preventDefault();
+
+                    sendMessage();
+                }
+            });
+
+            $('#chat-form').submit(function(event){
+                event.preventDefault();
+
+                sendMessage();
+            })
 		});
 	</script>
 </body>
