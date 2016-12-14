@@ -23,12 +23,21 @@ mongo.connect('mongodb://127.0.0.1/chat', function(err, db){
 
 		var collection =  db.collection('messages');
 
+		//Retrive the messages
+		collection.find().limit(15).toArray(function(err, result){
+			if(err){
+				throw err;
+			}
+
+			socket.emit('messages', result);
+		});
+
+		//Waiting for input
 		socket.on('input', function(data){
 			whiteSpacePattern = /^\s*$/;
 
 			if(whiteSpacePattern.test(data.name) || whiteSpacePattern.test(data.message)){
-				console.log('White!!');
-				socket.emit('status', 'Name and Message is required.');
+				sendStatus('Name and Message is required.');
 				return;
 			}
 
@@ -38,9 +47,15 @@ mongo.connect('mongodb://127.0.0.1/chat', function(err, db){
 			}
 
 			collection.insert(chat, function(){
-				console.log('Insert Success')
+				client.emit('messages', [chat]);
+
+				sendStatus('Message has been sent.');
 			});
 		});
+
+		sendStatus = function(status){
+			socket.emit('status', status);
+		}
 	});
 
 });
