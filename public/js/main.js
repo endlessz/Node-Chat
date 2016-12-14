@@ -31,8 +31,13 @@ $(function(){
                 $('#chat').append(list);
             }
 
+            $('#no-message').addClass('inactive');
             scrollDown();
+
+            return;
         }
+
+        $('#no-message').removeClass('inactive');
     });
 
     //Send message
