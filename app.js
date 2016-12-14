@@ -24,6 +24,14 @@ mongo.connect('mongodb://127.0.0.1/chat', function(err, db){
 		var collection =  db.collection('messages');
 
 		socket.on('input', function(data){
+			whiteSpacePattern = /^\s*$/;
+
+			if(whiteSpacePattern.test(data.name) || whiteSpacePattern.test(data.message)){
+				console.log('White!!');
+				socket.emit('status', 'Name and Message is required.');
+				return;
+			}
+
 			var chat = {
 				name: data.name,
 				message: data.message
