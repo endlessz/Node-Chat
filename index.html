@@ -65,9 +65,10 @@
                 $('#status').text(data);
             });
 
+            //Received messages
             socket.on('messages', function(data){
                 if(data.length){
-                    for(var i = 0 ; i < data.length ; ++i){
+                    for(var i = data.length - 1; i >= 0 ; --i){
                         var list = $(document.createElement('li'));
                         list.addClass('left clearfix');
 
@@ -88,6 +89,8 @@
 
                         $('#chat').append(list);
                     }
+
+                    scrollDown();
                 }
             });
 
@@ -114,6 +117,12 @@
 
                 sendMessage();
             })
+
+            function scrollDown() {
+                $(".panel-body").animate({ scrollTop: $(document).height() }, "slow");
+
+                return false;
+            }
 		});
 	</script>
 </body>
