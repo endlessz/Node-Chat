@@ -24,7 +24,7 @@ mongo.connect('mongodb://127.0.0.1/chat', function(err, db){
 		var collection =  db.collection('messages');
 
 		//Retrive the messages
-		collection.find().limit(15).toArray(function(err, result){
+		collection.find().sort({_id: -1}).limit(10).toArray(function(err, result){
 			if(err){
 				throw err;
 			}
