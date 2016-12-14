@@ -1,3 +1,3 @@
 # Node-Chat
 
-Practice Real Time Chat using Node.js
+Practice Real Time Chat using Node.js, Express, Mongodb and Socket.io
