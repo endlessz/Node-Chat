@@ -93,6 +93,10 @@
 
                 sendMessage();
             })
+
+            socket.on('status', function(data){
+                $('#status').text(data);
+            });
 		});
 	</script>
 </body>
